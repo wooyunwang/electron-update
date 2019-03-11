@@ -5,10 +5,11 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:mac": "electron-packager ./ --platform=mas",
-    "build:win": "electron-packager ./ --platform=win32"
+    "mac": "electron-packager ./ --platform=mas --icon=icon/icon.icns --overwrite",
+    "win": "electron-packager ./ --platform=win32 --icon=icon/icon.ico --overwrite",
+    "icon": "./node_modules/.bin/electron-icon-maker --input=icon/logo.png --output=icon"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "git@github.com:naihe138/electron-update.git",
   "keywords": [
     "Electron",
     "quick",
@@ -28,5 +29,8 @@
   },
   "win": {
     "icon": "icon/icon.ico"
+  },
+  "dependencies": {
+    "update-electron-app": "^1.3.0"
   }
 }

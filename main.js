@@ -1,7 +1,7 @@
 const electron = require('electron')
 const { app, BrowserWindow } = electron
 let mainWindow
-
+require('update-electron-app')()
 function createWindow () {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize
   mainWindow = new BrowserWindow({
