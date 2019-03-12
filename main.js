@@ -12,8 +12,8 @@ function createWindow () {
       nativeWindowOpen: false
     }
   })
-  mainWindow.loadFile('index.html')
-  // mainWindow.loadURL('https://www.kye-erp.com')
+  // mainWindow.loadFile('index.html')
+  mainWindow.loadURL('https://www.kye-erp.com')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
