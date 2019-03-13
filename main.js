@@ -17,17 +17,22 @@ function createWindow () {
   // 设置ua
   mainWindow.webContents.setUserAgent(mainWindow.webContents.getUserAgent() + ' kye-erp')
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
   mainWindow.on('closed', function () {
     mainWindow = null
   })
-  const fileExtend = ['.pdf', '.html', '.txt', '.md']
+  const fileExtend = ['.pdf', '.html', '.txt', '.md', '/#/']
   // 打开新窗口
   mainWindow.webContents.on('new-window', (event, url) => {
+    if (url.includes('/#/')) return
     event.preventDefault()
     const isOpen = fileExtend.some(v => url.includes(v))
     if (isOpen) {
-      const nwin = new PDFWindow({ nativeWindowOpen: true, swebPreferences: { plugins: true }})
+      const nwin = new PDFWindow({ 
+        odeIntegration: true, 
+        nativeWindowOpen: true, 
+        swebPreferences: { plugins: true }
+      })
       // win.once('ready-to-show', () => win.show())
       nwin.loadURL(url)
       event.newGuest = nwin
