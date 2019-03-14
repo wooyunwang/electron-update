@@ -1,7 +1,8 @@
 const electron = require('electron')
 const PDFWindow = require('electron-pdf-window')
-const { app, BrowserWindow } = electron
+const { app, BrowserWindow, webContents } = electron
 let mainWindow
+const fileExtend = ['.pdf', '.html', '.txt', '.md', '/#/']
 function createWindow () {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize
   mainWindow = new BrowserWindow({
@@ -17,34 +18,41 @@ function createWindow () {
   // 设置ua
   mainWindow.webContents.setUserAgent(mainWindow.webContents.getUserAgent() + ' kye-erp')
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
   mainWindow.on('closed', function () {
     mainWindow = null
   })
-  const fileExtend = ['.pdf', '.html', '.txt', '.md', '/#/']
   // 打开新窗口
   mainWindow.webContents.on('new-window', (event, url) => {
-    if (url.includes('/#/')) return
-    event.preventDefault()
-    const isOpen = fileExtend.some(v => url.includes(v))
-    if (isOpen) {
-      const nwin = new PDFWindow({ 
-        odeIntegration: true, 
-        nativeWindowOpen: true, 
-        swebPreferences: { plugins: true }
-      })
-      // win.once('ready-to-show', () => win.show())
-      nwin.loadURL(url)
-      event.newGuest = nwin
-    } else {
-      mainWindow.webContents.downloadURL(url)
-    }
+    openNewWindow(event, url, mainWindow.webContents)
   })
+}
+
+function openNewWindow (event, url, parent) {
+  // if (url.includes('/#/')) return
+  event.preventDefault()
+  const isOpen = fileExtend.some(v => url.includes(v))
+  if (isOpen) {
+    const nwin = new PDFWindow({ 
+      odeIntegration: true, 
+      nativeWindowOpen: true, 
+      swebPreferences: { plugins: true }
+    })
+    nwin.webContents.setUserAgent(nwin.webContents.getUserAgent() + ' kye-erp')
+    nwin.loadURL(url)
+    event.newGuest = nwin
+  } else {
+    parent.webContents.downloadURL(url)
+  }
 }
 
 app.on('ready', createWindow)
 
 app.on('window-all-closed', function () {
+  let allCons = webContents.getAllWebContents() || []
+  allCons.forEach(c => {
+    c.send('allclosed')
+  })
   if (process.platform !== 'darwin') {
     app.quit()
   }
