@@ -14,11 +14,11 @@ function createWindow () {
     }
   })
   // mainWindow.loadFile('index.html')
-  mainWindow.loadURL('http://localhost:8080')
+  mainWindow.loadURL('http://10.31.20.57:8080')
   // 设置ua
   mainWindow.webContents.setUserAgent(mainWindow.webContents.getUserAgent() + ' kye-erp')
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
   mainWindow.on('closed', function () {
     mainWindow = null
   })
